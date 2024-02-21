@@ -228,7 +228,9 @@ class MSParseHtml(ParserBase):
                     if p_tag.get('class') in self.headers_class_dict.values():
                         previous_id_num = 0
                         if previous_h4 := p_tag.findPrevious(
-                                lambda tag: tag.name == 'h4' and re.search(f"{p_tag['id']}\d+$", tag['id'], re.I)):
+                                #lambda tag: tag.name == 'h4' and re.search(f"{p_tag['id']}\d+$", tag['id'], re.I)):
+                                lambda tag: tag.name == 'h4' and re.search(rf"{p_tag['id']}\d+$", tag['id'], re.I)):
+
                             previous_id_num = int(re.search(r'\d+$', previous_h4['id'], re.I).group())
                         p_tag['id'] = f'{p_tag["id"]}{str(previous_id_num + 1).zfill(2)}'
                 elif value == 'h5':
@@ -287,7 +289,9 @@ class MSParseHtml(ParserBase):
         sub_alpha_ol = None
         prev_chap_id = None
         for p_tag in self.soup.findAll('p', {'class': self.tag_type_dict['ol_p']}):
-            if not re.search('\w+', p_tag.get_text()):
+            #if not re.search('\w+', p_tag.get_text()):
+            if not re.search(r'\w+', p_tag.get_text()):
+
                 continue
             if chap_id := p_tag.findPrevious(lambda tag: tag.name in ['h2', 'h3'] and tag.get('id')):
                 sec_id = chap_id["id"]
